@@ -5,6 +5,8 @@ authors = ["Jon Haddad <jon@jonhaddad.com>"]
 
 [dependencies]
 byteorder = "0.4"
+env_logger = "*"
+bufstream = "*"
 
 [dependencies.peg]
 git = "https://github.com/kevinmehall/rust-peg.git"

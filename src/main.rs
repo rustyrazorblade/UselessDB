@@ -5,6 +5,10 @@ use std::str;
 use byteorder::{ReadBytesExt, WriteBytesExt, BigEndian};
 use std::cmp::{Ordering, PartialOrd};
 
+use std::net::{TcpListener, TcpStream};
+use std::thread;
+
+
 enum SimpleTypeDef {
     Int,
     Float,
@@ -119,6 +123,21 @@ fn test_string_comparisons() {
 
 
 fn main() {
-    println!("Hello, world!");
+    println!("Starting up the worst database of all time.  What a giant mistake you have made.");
+    println!("Starting on port 6000");
+
+    let tcp = TcpListener::bind("127.0.0.1:6000").unwrap();
+    for stream in tcp.incoming() {
+        if let TcpStream(s) = stream {
+            println!("Someone has made the terrible decision of connecting");
+            thread::spawn(move || handle_client(stream) );
+        }
+    }
+
+    println!("Goodbye, you will regret ever having run this.");
+}
+
+fn handle_client(mut stream: TcpStream) {
+
 
 }
