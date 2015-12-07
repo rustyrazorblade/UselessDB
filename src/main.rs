@@ -128,9 +128,9 @@ fn main() {
 
     let tcp = TcpListener::bind("127.0.0.1:6000").unwrap();
     for stream in tcp.incoming() {
-        if let TcpStream(s) = stream {
+        if let Ok(s) = stream {
             println!("Someone has made the terrible decision of connecting");
-            thread::spawn(move || handle_client(stream) );
+            thread::spawn(move || handle_client(s) );
         }
     }
 
