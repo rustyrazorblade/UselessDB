@@ -1,0 +1,18 @@
+[root]
+name = "uselessdb"
+version = "0.1.0"
+dependencies = [
+ "byteorder 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "peg 0.3.6 (git+https://github.com/kevinmehall/rust-peg.git)",
+]
+
+[[package]]
+name = "byteorder"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "peg"
+version = "0.3.6"
+source = "git+https://github.com/kevinmehall/rust-peg.git#ca12a4993b3c0acb7b4f95a60625c3ad8c6e1a33"
+
