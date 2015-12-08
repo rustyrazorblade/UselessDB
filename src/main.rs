@@ -1,4 +1,8 @@
+#![feature(plugin)]
+#![plugin(peg_syntax_ext)]
+
 extern crate byteorder;
+extern crate bufstream;
 
 use std::io::Cursor;
 use std::str;
@@ -7,6 +11,9 @@ use std::cmp::{Ordering, PartialOrd};
 
 use std::net::{TcpListener, TcpStream};
 use std::thread;
+use bufstream::BufStream;
+
+use std::io::{Read, BufRead, Write};
 
 
 enum SimpleTypeDef {
@@ -129,8 +136,10 @@ fn main() {
     let tcp = TcpListener::bind("127.0.0.1:6000").unwrap();
     for stream in tcp.incoming() {
         if let Ok(s) = stream {
-            println!("Someone has made the terrible decision of connecting");
+            println!("Someone has made the terrible decision of connecting.");
             thread::spawn(move || handle_client(s) );
+        } else {
+            println!("Massive failure");
         }
     }
 
@@ -138,6 +147,41 @@ fn main() {
 }
 
 fn handle_client(mut stream: TcpStream) {
+    let buffer = BufStream::new(stream.try_clone().unwrap());
 
+    for line in buffer.lines() {
+        match line {
+            Ok(l) => {
+                println!("Got something {}", l);
+            },
+            Err(_) => {
+                println!("Geee, an error.  Shocker.  Not really though.  Worst DB ever.");
+            }
+        }
+    }
 
 }
+
+fn handle_command(line: &str) {
+
+}
+
+enum UselessStatement {
+    SetType(SimpleTypeDef),
+    SetVar(SimpleType),
+    Comparison(SimpleType)
+}
+
+
+/*
+type int|float|string
+var = 4.5
+var = "this is a var"
+var = 5
+var > 10
+var < 5.0
+*/
+
+peg! useless(r#"
+
+"#);

@@ -1,0 +1,33 @@
+use super::{UselessStatement, SimpleType, SimpleTypeDef};
+
+string -> str
+    = ([^\'] / "''")*
+    {
+        match_str
+    }
+
+#[pub]
+quoted_string -> SimpleType
+    = __ single_quote
+      s:string
+      single_quote __
+    {
+        SimpleType::from_string(s)
+    }
+
+dash = "-"
+single_quote = "'"
+
+whitespace
+= [ \t\u{00A0}\u{FEFF}\u{1680}\u{180E}\u{2000}-\u{200A}\u{202F}\u{205F}\u{3000}] // \v\f removed
+
+eol
+= "\n"
+/ "\r\n"
+/ "\r"
+/ "\u{2028}"
+/ "\u{2029}"
+
+int -> isize
+    = (dash? [1-9][0-9]* / "0")
+    { match_str.trim().parse().unwrap() }
