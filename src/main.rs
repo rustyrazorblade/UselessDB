@@ -174,6 +174,8 @@ enum UselessStatement {
 }
 
 peg_file! useless("useless.rustpeg");
+
+
 /*
 type int|float|string
 var = 4.5
@@ -184,3 +186,21 @@ var < 5.0
 var == 2.0
 get
 */
+
+use useless::variable;
+
+#[test]
+fn test_variable_parsing() {
+    let v = variable("4").unwrap();
+    assert!(v == SimpleType::from_int(4));
+
+    let v = variable("4.0").unwrap();
+    assert!(v == SimpleType::from_float(4.0));
+
+}
+
+#[test]
+fn test_string_parsing() {
+    let v = variable(r#"You are a monkey"#).unwrap();
+    assert!(v == SimpleType::from_string("You are a monkey"));
+}

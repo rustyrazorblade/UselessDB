@@ -5,7 +5,7 @@ use super::{UselessStatement, SimpleType, SimpleTypeDef};
 
 #[pub]
 variable -> SimpleType
-    = quoted_string / integer / float
+    = quoted_string / float / integer 
 
 string -> String
     = ([^\"] / "\"")*
