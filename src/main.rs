@@ -187,7 +187,7 @@ var == 2.0
 get
 */
 
-use useless::{variable,raw_string};
+use useless::{variable,raw_string,escaped_quote};
 
 #[test]
 fn test_variable_parsing() {
@@ -209,4 +209,9 @@ fn test_string_parsing() {
 #[test]
 fn test_simple_string() {
     raw_string("test").unwrap();
+}
+
+#[test]
+fn test_escaped_quote() {
+    escaped_quote(r#"\""#).unwrap();
 }

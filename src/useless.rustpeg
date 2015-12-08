@@ -9,7 +9,7 @@ variable -> SimpleType
 
 #[pub]
 raw_string -> String
-    = ([^\"])*
+    = ([^\"] / escaped_quote )*
     {
         match_str.to_string()
     }
@@ -32,6 +32,8 @@ float -> SimpleType
     { SimpleType::from_float(match_str.trim().parse().unwrap())}
 
 
+#[pub]
+escaped_quote = '\\"'
 single_quote = "'"
 double_quote = '"'
 dash = "-"
