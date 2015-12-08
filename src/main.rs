@@ -153,6 +153,7 @@ fn handle_client(mut stream: TcpStream) {
         match line {
             Ok(l) => {
                 println!("Got something {}", l);
+                let result = handle_command(&l);
             },
             Err(_) => {
                 println!("Geee, an error.  Shocker.  Not really though.  Worst DB ever.");
