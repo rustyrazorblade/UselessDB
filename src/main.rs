@@ -17,6 +17,8 @@ use std::io::{Read, BufRead, Write};
 
 use std::sync::{Mutex, Arc};
 
+type DB = Arc<Mutex<Database>>;
+
 #[derive(Debug)]
 pub enum SimpleTypeDef {
     Int,
@@ -162,7 +164,7 @@ fn main() {
     println!("Goodbye, you will regret ever having run this.");
 }
 
-fn handle_client(mut stream: TcpStream, mut db2: Arc<Mutex<Database>>) {
+fn handle_client(mut stream: TcpStream, mut db: Arc<Mutex<Database>>) {
     let buffer = BufStream::new(stream.try_clone().unwrap());
 
     for line in buffer.lines() {
@@ -171,11 +173,8 @@ fn handle_client(mut stream: TcpStream, mut db2: Arc<Mutex<Database>>) {
                 println!("Got something {}", l);
                 if let Ok(p) = statement(&l) {
                     println!("{:?}", p);
-                    {
-                        let db = (*db2).lock().unwrap();
-                        println!("Acquired mutex lock");
-                        handle_command(&stream, p);
-                    }
+                    println!("Acquired mutex lock");
+                    handle_command(&stream, p, &db);
                 } else {
                     println!("Parse error");
                     continue;
@@ -189,8 +188,11 @@ fn handle_client(mut stream: TcpStream, mut db2: Arc<Mutex<Database>>) {
 
 }
 
-fn handle_command(mut stream: &TcpStream, command: UselessStatement) {
-
+fn handle_command(mut stream: &TcpStream, command: UselessStatement, db: &Arc<Mutex<Database>>) {
+    match command {
+        UselessStatement::SetType(def) => {},
+        _ => {},
+    };
 }
 
 enum CommandError {
