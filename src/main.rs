@@ -22,7 +22,7 @@ enum SimpleTypeDef {
     String,
 }
 
-struct SimpleType {
+pub struct SimpleType {
     otype: SimpleTypeDef,
     value: Vec<u8>,
 }
@@ -172,7 +172,7 @@ enum UselessStatement {
     Comparison(SimpleType)
 }
 
-
+peg_file! useless("useless.rustpeg");
 /*
 type int|float|string
 var = 4.5
@@ -180,8 +180,6 @@ var = "this is a var"
 var = 5
 var > 10
 var < 5.0
+var == 2.0
+get
 */
-
-peg! useless(r#"
-
-"#);
