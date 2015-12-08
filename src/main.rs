@@ -173,7 +173,6 @@ fn handle_client(mut stream: TcpStream, mut db: Arc<Mutex<Database>>) {
                 println!("Got something {}", l);
                 if let Ok(p) = statement(&l) {
                     println!("{:?}", p);
-                    println!("Acquired mutex lock");
                     handle_command(&stream, p, &db);
                 } else {
                     println!("Parse error");
@@ -189,6 +188,9 @@ fn handle_client(mut stream: TcpStream, mut db: Arc<Mutex<Database>>) {
 }
 
 fn handle_command(mut stream: &TcpStream, command: UselessStatement, db: &Arc<Mutex<Database>>) {
+    println!("Acquiring mutex lock");
+    let database = db.lock().unwrap();
+    println!("Acquired mutex lock");
     match command {
         UselessStatement::SetType(def) => {},
         _ => {},
