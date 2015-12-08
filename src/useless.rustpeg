@@ -5,7 +5,7 @@ use super::{UselessStatement, SimpleType, SimpleTypeDef};
 
 #[pub]
 variable -> SimpleType
-    = quoted_string / float / integer 
+    = quoted_string / float / integer
 
 string -> String
     = ([^\"] / "\"")*
@@ -15,9 +15,9 @@ string -> String
 
 #[pub]
 quoted_string -> SimpleType
-    = __ single_quote
+    = __ double_quote
       s:string
-      single_quote __
+      double_quote __
     {
         SimpleType::from_string(&s)
     }
@@ -32,6 +32,7 @@ float -> SimpleType
 
 
 single_quote = "'"
+double_quote = '"'
 dash = "-"
 var = "var"
 eq = "="

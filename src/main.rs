@@ -201,6 +201,7 @@ fn test_variable_parsing() {
 
 #[test]
 fn test_string_parsing() {
-    let v = variable(r#"You are a monkey"#).unwrap();
-    assert!(v == SimpleType::from_string("You are a monkey"));
+    let s = r#"You are a monkey"#;
+    let v = variable(s).unwrap();
+    assert!(v == SimpleType::from_string(s));
 }
