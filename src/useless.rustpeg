@@ -3,6 +3,9 @@ use super::{UselessStatement, SimpleType, SimpleTypeDef};
 
 // set_command = var __ string __
 
+#[pub]
+variable -> SimpleType
+    = quoted_string / integer / float
 
 string -> String
     = ([^\"] / "\"")*
@@ -26,7 +29,6 @@ integer -> SimpleType
 float -> SimpleType
     = whitespace* "-"? [0-9]* "." [0-9]+
     { SimpleType::from_float(match_str.trim().parse().unwrap())}
-
 
 
 single_quote = "'"
