@@ -184,7 +184,7 @@ var = 5
 var > 10
 var < 5.0
 var == 2.0
-get
+var 
 */
 
 use useless::{variable,raw_string,escaped_quote, quoted_string, set_command};

@@ -1,9 +1,18 @@
 use super::{UselessStatement, SimpleType, SimpleTypeDef};
 
 #[pub]
+statement -> UselessStatement
+    = set_command / type_command
+
+#[pub]
 set_command -> UselessStatement
     = var __ eq __ v:variable
     { UselessStatement::SetVar(v) }
+
+#[pub]
+type_command -> UselessStatement
+    = type __ eq __ t:types
+    { UselessStatement::SetType(t) }
 
 #[pub]
 variable -> SimpleType
@@ -42,6 +51,17 @@ dash = "-"
 var = "var"
 eq = "="
 __ = (whitespace / eol)*
+type = "type"i
+
+// types
+types -> SimpleTypeDef
+    = int_t / float_t / string_t
+int_t -> SimpleTypeDef
+    = "int"  { SimpleTypeDef::Int }
+float_t -> SimpleTypeDef
+    = "int"  { SimpleTypeDef::Float }
+string_t -> SimpleTypeDef
+    = "int"  { SimpleTypeDef::String }
 
 whitespace
   = [ \t\u{00A0}\u{FEFF}\u{1680}\u{180E}\u{2000}-\u{200A}\u{202F}\u{205F}\u{3000}] // \v\f removed
