@@ -171,6 +171,11 @@ fn handle_client(mut stream: TcpStream, mut db2: Arc<Mutex<Database>>) {
                 println!("Got something {}", l);
                 if let Ok(p) = statement(&l) {
                     println!("{:?}", p);
+                    {
+                        let db = (*db2).lock().unwrap();
+                        println!("Acquired mutex lock");
+                        handle_command(&stream, p);
+                    }
                 } else {
                     println!("Parse error");
                     continue;
@@ -183,12 +188,14 @@ fn handle_client(mut stream: TcpStream, mut db2: Arc<Mutex<Database>>) {
     }
 
 }
+
+fn handle_command(mut stream: &TcpStream, command: UselessStatement) {
+
+}
+
 enum CommandError {
     ParseError
 }
-// fn handle_command(line: &str) -> Result<CommandError, ()> {
-//     line = statement(line);
-// }
 
 #[derive(Debug)]
 pub enum UselessStatement {
