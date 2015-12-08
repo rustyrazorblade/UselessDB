@@ -16,7 +16,7 @@ use bufstream::BufStream;
 use std::io::{Read, BufRead, Write};
 
 
-enum SimpleTypeDef {
+pub enum SimpleTypeDef {
     Int,
     Float,
     String,
@@ -167,7 +167,7 @@ fn handle_command(line: &str) {
 
 }
 
-enum UselessStatement {
+pub enum UselessStatement {
     SetType(SimpleTypeDef),
     SetVar(SimpleType),
     Comparison(SimpleType)
@@ -187,7 +187,7 @@ var == 2.0
 get
 */
 
-use useless::{variable,raw_string,escaped_quote, quoted_string};
+use useless::{variable,raw_string,escaped_quote, quoted_string, set_command};
 
 #[test]
 fn test_variable_parsing() {
@@ -221,4 +221,9 @@ fn test_simple_string() {
 #[test]
 fn test_escaped_quote() {
     escaped_quote(r#"\""#).unwrap();
+}
+
+#[test]
+fn test_set_command() {
+    set_command("var = 1").unwrap();
 }
