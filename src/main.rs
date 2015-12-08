@@ -16,12 +16,14 @@ use bufstream::BufStream;
 use std::io::{Read, BufRead, Write};
 
 
+#[derive(Debug)]
 pub enum SimpleTypeDef {
     Int,
     Float,
     String,
 }
 
+#[derive(Debug)]
 pub struct SimpleType {
     otype: SimpleTypeDef,
     value: Vec<u8>,
@@ -153,7 +155,12 @@ fn handle_client(mut stream: TcpStream) {
         match line {
             Ok(l) => {
                 println!("Got something {}", l);
-                let result = handle_command(&l);
+                if let Ok(p) = statement(&l) {
+                    println!("{:?}", p);
+                } else {
+                    println!("Parse error");
+                    continue;
+                }
             },
             Err(_) => {
                 println!("Geee, an error.  Shocker.  Not really though.  Worst DB ever.");
@@ -162,11 +169,14 @@ fn handle_client(mut stream: TcpStream) {
     }
 
 }
-
-fn handle_command(line: &str) {
-
+enum CommandError {
+    ParseError
 }
+// fn handle_command(line: &str) -> Result<CommandError, ()> {
+//     line = statement(line);
+// }
 
+#[derive(Debug)]
 pub enum UselessStatement {
     SetType(SimpleTypeDef),
     SetVar(SimpleType),
@@ -184,10 +194,10 @@ var = 5
 var > 10
 var < 5.0
 var == 2.0
-var 
+var
 */
 
-use useless::{variable,raw_string,escaped_quote, quoted_string, set_command};
+use useless::{variable,raw_string,escaped_quote, quoted_string, set_command, statement};
 
 #[test]
 fn test_variable_parsing() {
