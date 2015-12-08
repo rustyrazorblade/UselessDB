@@ -1,7 +1,10 @@
 use super::{UselessStatement, SimpleType, SimpleTypeDef};
 
+
+
+
 string -> String
-    = ([^\'] / "''")*
+    = ([^\"] / "\"")*
     {
         match_str.to_string()
     }
@@ -16,8 +19,8 @@ quoted_string -> SimpleType
     }
 
 single_quote = "'"
-
 dash = "-"
+var = "var"
 
 __ = (whitespace / eol)*
 
