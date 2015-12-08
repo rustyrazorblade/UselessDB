@@ -14,6 +14,8 @@ type_command -> UselessStatement
     = type __ eq __ t:types
     { UselessStatement::SetType(t) }
 
+
+
 #[pub]
 variable -> SimpleType
     = quoted_string / float / integer

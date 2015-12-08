@@ -15,6 +15,7 @@ use bufstream::BufStream;
 
 use std::io::{Read, BufRead, Write};
 
+use std::sync::{Mutex, Arc};
 
 #[derive(Debug)]
 pub enum SimpleTypeDef {
@@ -129,11 +130,22 @@ fn test_string_comparisons() {
     assert!(z == t);
 }
 
+#[derive(Debug)]
+struct Database {
+    v: Option<SimpleType>
+}
 
+impl Database {
+    fn new() -> Database {
+        Database{v:None}
+    }
+}
 
 fn main() {
     println!("Starting up the worst database of all time.  What a giant mistake you have made.");
     println!("Starting on port 6000");
+
+    let db = Arc::new(Mutex::new(Database::new()));
 
     let tcp = TcpListener::bind("127.0.0.1:6000").unwrap();
     for stream in tcp.incoming() {
