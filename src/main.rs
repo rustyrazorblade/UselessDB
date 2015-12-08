@@ -187,7 +187,7 @@ var == 2.0
 get
 */
 
-use useless::{variable,raw_string,escaped_quote};
+use useless::{variable,raw_string,escaped_quote, quoted_string};
 
 #[test]
 fn test_variable_parsing() {
@@ -200,8 +200,15 @@ fn test_variable_parsing() {
 }
 
 #[test]
+fn test_explicit_quoted_string_parsing() {
+    let s = r#""You are a monkey""#;
+    let v = quoted_string(s).unwrap();
+}
+
+#[test]
 fn test_string_parsing() {
-    let s = r#"You are a monkey"#;
+    let s = r#""You are a monkey""#;
+    println!("expecting quotes: {}", s);
     let v = variable(s).unwrap();
     assert!(v == SimpleType::from_string(s));
 }

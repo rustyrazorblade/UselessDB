@@ -9,7 +9,7 @@ variable -> SimpleType
 
 #[pub]
 raw_string -> String
-    = ([^\"] / escaped_quote )*
+    = ( [^\"] / escaped_quote )*
     {
         match_str.to_string()
     }
