@@ -149,9 +149,11 @@ fn main() {
 
     let tcp = TcpListener::bind("127.0.0.1:6000").unwrap();
     for stream in tcp.incoming() {
+
         if let Ok(s) = stream {
             println!("Someone has made the terrible decision of connecting.");
-            thread::spawn(move || handle_client(s) );
+            let db2 = db.clone();
+            thread::spawn(move || handle_client(s, db2) );
         } else {
             println!("Massive failure");
         }
@@ -160,7 +162,7 @@ fn main() {
     println!("Goodbye, you will regret ever having run this.");
 }
 
-fn handle_client(mut stream: TcpStream) {
+fn handle_client(mut stream: TcpStream, mut db2: Arc<Mutex<Database>>) {
     let buffer = BufStream::new(stream.try_clone().unwrap());
 
     for line in buffer.lines() {
