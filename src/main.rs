@@ -187,7 +187,7 @@ var == 2.0
 get
 */
 
-use useless::variable;
+use useless::{variable,raw_string};
 
 #[test]
 fn test_variable_parsing() {
@@ -204,4 +204,9 @@ fn test_string_parsing() {
     let s = r#"You are a monkey"#;
     let v = variable(s).unwrap();
     assert!(v == SimpleType::from_string(s));
+}
+
+#[test]
+fn test_simple_string() {
+    raw_string("test").unwrap();
 }

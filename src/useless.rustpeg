@@ -7,8 +7,9 @@ use super::{UselessStatement, SimpleType, SimpleTypeDef};
 variable -> SimpleType
     = quoted_string / float / integer
 
-string -> String
-    = ([^\"] / "\"")*
+#[pub]
+raw_string -> String
+    = ([^\"])*
     {
         match_str.to_string()
     }
@@ -16,7 +17,7 @@ string -> String
 #[pub]
 quoted_string -> SimpleType
     = __ double_quote
-      s:string
+      s:raw_string
       double_quote __
     {
         SimpleType::from_string(&s)
