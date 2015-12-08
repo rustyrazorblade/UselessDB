@@ -134,12 +134,13 @@ fn test_string_comparisons() {
 
 #[derive(Debug)]
 struct Database {
-    v: Option<SimpleType>
+    v: Option<SimpleType>,
+    t: Option<SimpleTypeDef>,
 }
 
 impl Database {
     fn new() -> Database {
-        Database{v:None}
+        Database{v:None, t:None}
     }
 }
 
@@ -187,12 +188,19 @@ fn handle_client(mut stream: TcpStream, mut db: Arc<Mutex<Database>>) {
 
 }
 
-fn handle_command(mut stream: &TcpStream, command: UselessStatement, db: &Arc<Mutex<Database>>) {
+fn handle_command(mut stream: &TcpStream, command: UselessStatement, mut db: &Arc<Mutex<Database>>) {
     println!("Acquiring mutex lock");
-    let database = db.lock().unwrap();
+    let mut database = db.lock().unwrap();
     println!("Acquired mutex lock");
     match command {
-        UselessStatement::SetType(def) => {},
+        UselessStatement::SetType(def) => {
+            println!("Resetting type");
+            database.t = Some(def);
+        },
+        UselessStatement::SetVar(t) =>
+        {
+
+        },
         _ => {},
     };
 }
