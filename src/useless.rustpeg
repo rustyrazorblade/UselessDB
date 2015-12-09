@@ -2,7 +2,7 @@ use super::{UselessStatement, SimpleType, SimpleTypeDef, Operation};
 
 #[pub]
 statement -> UselessStatement
-    = set_command / type_command / comparison_command
+    = set_command / type_command / comparison_command / get_command
 
 #[pub]
 set_command -> UselessStatement
@@ -20,6 +20,9 @@ comparison_command -> UselessStatement
     {
     UselessStatement::Comparison(v, c)
     }
+#[pub]
+get_command -> UselessStatement
+    = "get" { UselessStatement::Get }
 
 #[pub]
 variable -> SimpleType

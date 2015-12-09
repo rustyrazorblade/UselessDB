@@ -176,6 +176,11 @@ impl Database {
         // OK if we're using the right type
 
     }
+
+    fn get(&self) -> &Option<SimpleType> {
+        &self.v
+    }
+
     fn compare(&mut self, comparison: SimpleType, operation: Operation) -> bool {
         if let Some(ref dbval) = self.v {
             println!("safely comparing: {:?}", comparison);
@@ -278,6 +283,12 @@ fn handle_command(mut stream: &TcpStream, command: UselessStatement, mut db: &DB
             let result = database.compare(simple_type, op);
             println!("Compare result: {}", result);
         },
+        UselessStatement::Get => {
+            println!("Getting var");
+            if let &Some(ref tmp) = database.get() {
+                println!("var = {:?}", tmp);
+            }
+        }
         //_ => {},
     };
 }
@@ -291,6 +302,7 @@ pub enum UselessStatement {
     SetType(SimpleTypeDef),
     SetVar(SimpleType),
     Comparison(SimpleType, Operation),
+    Get
 }
 
 peg_file! useless("useless.rustpeg");
