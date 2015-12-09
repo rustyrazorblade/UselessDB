@@ -201,7 +201,7 @@ fn main() {
     println!("Goodbye, you will regret ever having run this.");
 }
 
-fn handle_client(mut stream: TcpStream, mut db: Arc<Mutex<Database>>) {
+fn handle_client(mut stream: TcpStream, mut db: DB ) {
     let buffer = BufStream::new(stream.try_clone().unwrap());
 
     for line in buffer.lines() {
@@ -224,7 +224,7 @@ fn handle_client(mut stream: TcpStream, mut db: Arc<Mutex<Database>>) {
 
 }
 
-fn handle_command(mut stream: &TcpStream, command: UselessStatement, mut db: &Arc<Mutex<Database>>) {
+fn handle_command(mut stream: &TcpStream, command: UselessStatement, mut db: &DB ) {
     println!("Acquiring mutex lock");
     let mut database = db.lock().unwrap();
     println!("Acquired mutex lock");
