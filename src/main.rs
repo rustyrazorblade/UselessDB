@@ -177,11 +177,25 @@ impl Database {
 
     }
     fn compare(&mut self, comparison: SimpleType, operation: Operation) -> bool {
-        println!("comparing: {:?}", comparison);
-        match operation {
-            Operation::Gt => true,
-            _ => false
-        }
+        if let Some(ref dbval) = self.v {
+            println!("safely comparing: {:?}", comparison);
+            let result = match operation {
+                Operation::Gt =>
+                    dbval > &comparison,
+                Operation::Gte =>
+                    dbval >= &comparison,
+                Operation::Lte =>
+                    dbval <= &comparison,
+                Operation::Lt =>
+                    dbval < &comparison,
+                Operation::Eq =>
+                    dbval == &comparison,
+            };
+            return result;
+
+        };
+        false
+
     }
 }
 
@@ -189,8 +203,11 @@ impl Database {
 fn test_db_compare() {
     let mut db = Database::new();
     let four = SimpleType::from_int(4);
+    let six = SimpleType::from_int(6);
+
     db.set(SimpleType::from_int(5));
-    db.compare(four, Operation::Gte);
+
+    assert!(db.compare(four, Operation::Gte));
 }
 
 #[test]
