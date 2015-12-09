@@ -273,9 +273,10 @@ fn handle_command(mut stream: &TcpStream, command: UselessStatement, mut db: &DB
         UselessStatement::SetVar(t) => { // SimpleType
             database.set(t);
         },
-        UselessStatement::Comparison(simple_type, string) => {
+        UselessStatement::Comparison(simple_type, op) => {
             println!("We have a comparison");
-
+            let result = database.compare(simple_type, op);
+            println!("Compare result: {}", result);
         },
         //_ => {},
     };
