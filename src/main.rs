@@ -8,7 +8,7 @@ use std::io::Cursor;
 use std::str;
 use byteorder::{ReadBytesExt, WriteBytesExt, BigEndian};
 use std::cmp::{Ordering, PartialOrd};
-
+use std::fmt;
 use std::net::{TcpListener, TcpStream};
 use std::thread;
 use bufstream::BufStream;
@@ -24,7 +24,17 @@ pub enum SimpleTypeDef {
     Int,
     Float,
     String,
+}
 
+impl fmt::Display for SimpleTypeDef {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let otype = match self {
+            &SimpleTypeDef::Int => "int",
+            &SimpleTypeDef::Float => "float",
+            &SimpleTypeDef::String => "string"
+        };
+        write!(f, "{}", otype)
+    }
 }
 
 impl PartialEq for SimpleTypeDef {
@@ -43,6 +53,15 @@ pub struct SimpleType {
     otype: SimpleTypeDef,
     value: Vec<u8>,
 }
+
+// impl Display for SimpleType {
+//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//         match self {
+//         }
+//         write!(f, "{}:{}", otype, self.y)
+//     }
+//
+// }
 
 enum SimpleTypeError {
     NonMatchingType
@@ -157,6 +176,7 @@ struct Database {
 pub enum Operation {
     Gt, Lt, Gte, Lte, Eq
 }
+
 impl Database {
     fn new() -> Database {
         Database{v:None, t:None}
