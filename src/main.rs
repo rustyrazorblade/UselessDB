@@ -181,7 +181,9 @@ impl Database {
 #[test]
 fn test_db_compare() {
     let mut db = Database::new();
+    let four = SimpleType::from_int(4);
     db.set(SimpleType::from_int(5));
+    db.compare(UselessStatement::Comparison(four, ">=".to_string()));
 }
 
 #[test]
