@@ -24,12 +24,28 @@ pub enum SimpleTypeDef {
     Int,
     Float,
     String,
+
+}
+
+impl PartialEq for SimpleTypeDef {
+    fn eq(&self, other: &SimpleTypeDef) -> bool {
+        match (self, other) {
+            (&SimpleTypeDef::Int, &SimpleTypeDef::Int) => true,
+            (&SimpleTypeDef::Float, &SimpleTypeDef::Float) => true,
+            (&SimpleTypeDef::String, &SimpleTypeDef::String) => true,
+            _ => false
+        }
+    }
 }
 
 #[derive(Debug)]
 pub struct SimpleType {
     otype: SimpleTypeDef,
     value: Vec<u8>,
+}
+
+enum SimpleTypeError {
+    NonMatchingType
 }
 
 impl SimpleType {
@@ -197,9 +213,18 @@ fn handle_command(mut stream: &TcpStream, command: UselessStatement, mut db: &Ar
             println!("Resetting type");
             database.t = Some(def);
         },
-        UselessStatement::SetVar(t) =>
+        UselessStatement::SetVar(t) => // SimpleType
         {
-
+            match ( &database.t, t) {
+                (&None, _) => {
+                    // if we haven't set a type yet, failure
+                    println!("No DB type set.  Instead of returning an error I'll just be stupid and print to stdout");
+                    return;
+                },
+                // if we're using the wrong type, failure
+                _ => { }
+            }
+            // OK if we're using the right type
         },
         _ => {},
     };
@@ -269,4 +294,11 @@ fn test_escaped_quote() {
 #[test]
 fn test_set_command() {
     set_command("var = 1").unwrap();
+}
+
+#[test]
+fn test_compare_type() {
+    assert!(SimpleTypeDef::Int == SimpleTypeDef::Int);
+    assert!(SimpleTypeDef::Int != SimpleTypeDef::Float);
+    assert!(SimpleTypeDef::Int != SimpleTypeDef::String);
 }
