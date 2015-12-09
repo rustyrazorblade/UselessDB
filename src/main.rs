@@ -235,11 +235,13 @@ fn handle_command(mut stream: &TcpStream, command: UselessStatement, mut db: &DB
             println!("Resetting type");
             database.t = Some(def);
         },
-        UselessStatement::SetVar(t) => // SimpleType
-        {
+        UselessStatement::SetVar(t) => { // SimpleType
             database.set(t);
         },
-        _ => {},
+        UselessStatement::Comparison(simple_type, string) => {
+            println!("We have a comparison");
+        },
+        //_ => {},
     };
 }
 
