@@ -179,6 +179,12 @@ impl Database {
 }
 
 #[test]
+fn test_db_compare() {
+    let mut db = Database::new();
+    db.set(SimpleType::from_int(5));
+}
+
+#[test]
 fn set_type() {
     let mut db = Database::new();
     let s = SimpleType::from_int(1);
