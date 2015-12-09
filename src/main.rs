@@ -54,14 +54,21 @@ pub struct SimpleType {
     value: Vec<u8>,
 }
 
-// impl Display for SimpleType {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         match self {
-//         }
-//         write!(f, "{}:{}", otype, self.y)
-//     }
-//
-// }
+impl fmt::Display for SimpleType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+
+        let val = match self.otype {
+            SimpleTypeDef::Int =>
+                Cursor::new(&self.value).read_i64::<BigEndian>().unwrap().to_string(),
+            SimpleTypeDef::Float =>
+                Cursor::new(&self.value).read_f64::<BigEndian>().unwrap().to_string(),
+            SimpleTypeDef::String =>
+                str::from_utf8(&self.value).unwrap().to_string()
+        };
+        write!(f, "{}:{}", self.otype, val)
+    }
+
+}
 
 enum SimpleTypeError {
     NonMatchingType
@@ -275,6 +282,7 @@ fn handle_client(mut stream: TcpStream, mut db: DB ) {
                     handle_command(&stream, p, &db);
                 } else {
                     println!("Parse error");
+                    stream.write("parse_error".as_bytes());
                     continue;
                 }
             },
@@ -286,6 +294,7 @@ fn handle_client(mut stream: TcpStream, mut db: DB ) {
 
 }
 
+
 fn handle_command(mut stream: &TcpStream, command: UselessStatement, mut db: &DB ) {
     println!("Acquiring mutex lock");
     let mut database = db.lock().unwrap();
@@ -294,19 +303,26 @@ fn handle_command(mut stream: &TcpStream, command: UselessStatement, mut db: &DB
         UselessStatement::SetType(def) => {
             println!("Resetting type");
             database.t = Some(def);
+            stream.write("ok\n".as_bytes());
         },
         UselessStatement::SetVar(t) => { // SimpleType
             database.set(t);
+            stream.write("ok\n".as_bytes());
         },
         UselessStatement::Comparison(simple_type, op) => {
             println!("We have a comparison");
             let result = database.compare(simple_type, op);
             println!("Compare result: {}", result);
+            let response = format!("{}\n", result);
+            stream.write(response.as_bytes());
         },
         UselessStatement::Get => {
             println!("Getting var");
             if let &Some(ref tmp) = database.get() {
                 println!("var = {:?}", tmp);
+                stream.write(format!("{}\n", tmp).as_bytes());
+            } else {
+                stream.write("None\n".as_bytes());
             }
         }
         //_ => {},
