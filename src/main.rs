@@ -173,8 +173,11 @@ impl Database {
         // OK if we're using the right type
 
     }
-    fn compare(&mut self, comparison: UselessStatement) {
+    fn compare(&mut self, comparison: UselessStatement) -> bool {
         println!("comparing: {:?}", comparison);
+        match comparison {
+            _ => false
+        }
     }
 }
 
