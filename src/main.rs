@@ -159,6 +159,8 @@ impl Database {
         Database{v:None, t:None}
     }
     fn set(&mut self, v: SimpleType) {
+        println!("Setting db to {:?}", v);
+        self.v = Some(v);
         // match ( &database.t, t) {
         //     (&None, _) => {
         //         // if we haven't set a type yet, failure
