@@ -251,7 +251,7 @@ enum CommandError {
 pub enum UselessStatement {
     SetType(SimpleTypeDef),
     SetVar(SimpleType),
-    Comparison(SimpleType)
+    Comparison(SimpleType, String),
 }
 
 peg_file! useless("useless.rustpeg");

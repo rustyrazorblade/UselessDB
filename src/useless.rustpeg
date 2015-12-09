@@ -14,7 +14,12 @@ type_command -> UselessStatement
     = type __ eq __ t:types
     { UselessStatement::SetType(t) }
 
-
+#[pub]
+comparison_command -> UselessStatement
+    = var __ c:comparison __ v:variable
+    {
+    UselessStatement::Comparison(v, c)
+    }
 
 #[pub]
 variable -> SimpleType
@@ -54,7 +59,8 @@ var = "var"
 eq = "="
 __ = (whitespace / eol)*
 type = "type"i
-comparison = "<" / "<=" / ">" / ">=" / "=="
+comparison -> String
+    = ("<" / "<=" / ">" / ">=" / "==") { match_str.to_string() }
 
 // types
 types -> SimpleTypeDef
