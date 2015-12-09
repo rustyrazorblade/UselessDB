@@ -1,4 +1,4 @@
-use super::{UselessStatement, SimpleType, SimpleTypeDef};
+use super::{UselessStatement, SimpleType, SimpleTypeDef, Operation};
 
 #[pub]
 statement -> UselessStatement
@@ -61,9 +61,12 @@ __ = (whitespace / eol)*
 type = "type"i
 
 #[pub]
-comparison -> String
-    = ( "<=" / ">=" / "<" / ">"  / "==")
-    { match_str.to_string() }
+comparison -> Operation
+    = "<=" { Operation::Lte }
+    / ">=" { Operation::Gte }
+    / "<"  { Operation::Lt }
+    / ">"  { Operation::Gt }
+    / "==" { Operation::Eq }
 
 // types
 types -> SimpleTypeDef

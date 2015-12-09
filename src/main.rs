@@ -153,7 +153,10 @@ struct Database {
     v: Option<SimpleType>,
     t: Option<SimpleTypeDef>,
 }
-
+#[derive(Debug)]
+pub enum Operation {
+    Gt, Lt, Gte, Lte, Eq
+}
 impl Database {
     fn new() -> Database {
         Database{v:None, t:None}
@@ -173,9 +176,10 @@ impl Database {
         // OK if we're using the right type
 
     }
-    fn compare(&mut self, comparison: UselessStatement) -> bool {
+    fn compare(&mut self, comparison: SimpleType, operation: Operation) -> bool {
         println!("comparing: {:?}", comparison);
-        match comparison {
+        match operation {
+            Operation::Gt => true,
             _ => false
         }
     }
@@ -186,7 +190,7 @@ fn test_db_compare() {
     let mut db = Database::new();
     let four = SimpleType::from_int(4);
     db.set(SimpleType::from_int(5));
-    db.compare(UselessStatement::Comparison(four, ">=".to_string()));
+    db.compare(four, Operation::Gte);
 }
 
 #[test]
@@ -254,6 +258,7 @@ fn handle_command(mut stream: &TcpStream, command: UselessStatement, mut db: &DB
         },
         UselessStatement::Comparison(simple_type, string) => {
             println!("We have a comparison");
+
         },
         //_ => {},
     };
@@ -267,7 +272,7 @@ enum CommandError {
 pub enum UselessStatement {
     SetType(SimpleTypeDef),
     SetVar(SimpleType),
-    Comparison(SimpleType, String),
+    Comparison(SimpleType, Operation),
 }
 
 peg_file! useless("useless.rustpeg");
