@@ -158,6 +158,26 @@ impl Database {
     fn new() -> Database {
         Database{v:None, t:None}
     }
+    fn set(&mut self, v: SimpleType) {
+        // match ( &database.t, t) {
+        //     (&None, _) => {
+        //         // if we haven't set a type yet, failure
+        //         println!("No DB type set.  Instead of returning an error I'll just be stupid and print to stdout");
+        //         return;
+        //     },
+        //     // if we're using the wrong type, failure
+        //     _ => { }
+        // }
+        // OK if we're using the right type
+
+    }
+}
+
+#[test]
+fn set_type() {
+    let mut db = Database::new();
+    let s = SimpleType::from_int(1);
+    db.set(s);
 }
 
 fn main() {
@@ -215,16 +235,7 @@ fn handle_command(mut stream: &TcpStream, command: UselessStatement, mut db: &Ar
         },
         UselessStatement::SetVar(t) => // SimpleType
         {
-            match ( &database.t, t) {
-                (&None, _) => {
-                    // if we haven't set a type yet, failure
-                    println!("No DB type set.  Instead of returning an error I'll just be stupid and print to stdout");
-                    return;
-                },
-                // if we're using the wrong type, failure
-                _ => { }
-            }
-            // OK if we're using the right type
+            database.set(t);
         },
         _ => {},
     };
