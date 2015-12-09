@@ -54,6 +54,7 @@ var = "var"
 eq = "="
 __ = (whitespace / eol)*
 type = "type"i
+comparison = "<" / "<=" / ">" / ">=" / "=="
 
 // types
 types -> SimpleTypeDef
