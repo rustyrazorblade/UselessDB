@@ -173,6 +173,9 @@ impl Database {
         // OK if we're using the right type
 
     }
+    fn compare(&mut self, comparison: UselessStatement) {
+        println!("comparing: {:?}", comparison);
+    }
 }
 
 #[test]
