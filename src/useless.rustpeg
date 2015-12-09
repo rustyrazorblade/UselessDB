@@ -2,7 +2,7 @@ use super::{UselessStatement, SimpleType, SimpleTypeDef};
 
 #[pub]
 statement -> UselessStatement
-    = set_command / type_command
+    = set_command / type_command / comparison_command
 
 #[pub]
 set_command -> UselessStatement
@@ -59,8 +59,11 @@ var = "var"
 eq = "="
 __ = (whitespace / eol)*
 type = "type"i
+
+#[pub]
 comparison -> String
-    = ("<" / "<=" / ">" / ">=" / "==") { match_str.to_string() }
+    = ( "<=" / ">=" / "<" / ">"  / "==")
+    { match_str.to_string() }
 
 // types
 types -> SimpleTypeDef

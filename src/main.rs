@@ -268,7 +268,7 @@ var == 2.0
 var
 */
 
-use useless::{variable,raw_string,escaped_quote, quoted_string, set_command, statement};
+use useless::{variable,raw_string,escaped_quote, quoted_string, set_command, statement, comparison_command, comparison};
 
 #[test]
 fn test_variable_parsing() {
@@ -314,4 +314,17 @@ fn test_compare_type() {
     assert!(SimpleTypeDef::Int == SimpleTypeDef::Int);
     assert!(SimpleTypeDef::Int != SimpleTypeDef::Float);
     assert!(SimpleTypeDef::Int != SimpleTypeDef::String);
+}
+
+#[test]
+fn test_comparison_parsing() {
+    comparison(">").expect(">");
+    comparison("<").expect("<");
+    comparison("<=").expect("<=");
+    comparison(">=").expect(">=");
+
+    comparison_command("var > 5").unwrap();
+    comparison_command("var >= 5").unwrap();
+    // comparison_command("var <= 5").unwrap();
+    // comparison_command("var < 5").unwrap();
 }
