@@ -320,8 +320,10 @@ fn handle_command(mut stream: &TcpStream, command: UselessStatement, mut db: &DB
         },
         UselessStatement::SetVar(t) => { // SimpleType
             // does the type match?  need to check it here
-            database.set(t);
-            stream.write("ok\n".as_bytes());
+            match database.set(t) {
+                Ok(_) => { stream.write("ok\n".as_bytes()); },
+                Err(_) => { stream.write("type_error\n".as_bytes()); }
+            };
         },
         UselessStatement::Comparison(simple_type, op) => {
             println!("We have a comparison");
