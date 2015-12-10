@@ -197,6 +197,12 @@ impl Database {
         if self.t.is_none() {
             return Err(DatabaseError::TypeError);
         }
+        if let Some(ref existing_type) = self.t {
+            // if val
+            if *existing_type != v.otype {
+                return Err(DatabaseError::TypeError);
+            }
+        }
         println!("Setting db to {:?}", v);
         self.v = Some(v);
         Ok(())
@@ -244,10 +250,15 @@ fn test_db_compare() {
 }
 
 #[test]
-fn set_type() {
+fn test_set_type() {
     let mut db = Database::new();
+    // WTF?
+    db.t = Some(SimpleTypeDef::Int);
     let s = SimpleType::from_int(1);
-    db.set(s);
+    db.set(s).expect("Error setting type");
+
+    assert!(db.set(SimpleType::from_float(1.0)).is_err(), "was expecting a type error");
+
 }
 
 
