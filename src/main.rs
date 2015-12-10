@@ -191,17 +191,6 @@ impl Database {
     fn set(&mut self, v: SimpleType) {
         println!("Setting db to {:?}", v);
         self.v = Some(v);
-        // match ( &database.t, t) {
-        //     (&None, _) => {
-        //         // if we haven't set a type yet, failure
-        //         println!("No DB type set.  Instead of returning an error I'll just be stupid and print to stdout");
-        //         return;
-        //     },
-        //     // if we're using the wrong type, failure
-        //     _ => { }
-        // }
-        // OK if we're using the right type
-
     }
 
     fn get(&self) -> &Option<SimpleType> {
@@ -306,6 +295,7 @@ fn handle_command(mut stream: &TcpStream, command: UselessStatement, mut db: &DB
             stream.write("ok\n".as_bytes());
         },
         UselessStatement::SetVar(t) => { // SimpleType
+            // does the type match?  need to check it here
             database.set(t);
             stream.write("ok\n".as_bytes());
         },
