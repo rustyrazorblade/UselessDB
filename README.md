@@ -13,7 +13,9 @@ ___________________
 
 Prepare yourself for the ultimate regret.  This is a statically typed single value database.  
 
-"Do one thing and do it well."
+*"Do one thing and do it well."*
+
+I have clearly taken this way to seriously.
 
 ## FAQ
 
