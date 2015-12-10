@@ -184,13 +184,22 @@ pub enum Operation {
     Gt, Lt, Gte, Lte, Eq
 }
 
+#[derive(Debug)]
+pub enum DatabaseError {
+    TypeError
+}
+
 impl Database {
     fn new() -> Database {
         Database{v:None, t:None}
     }
-    fn set(&mut self, v: SimpleType) {
+    fn set(&mut self, v: SimpleType) -> Result<(), DatabaseError> {
+        if self.t.is_none() {
+            return Err(DatabaseError::TypeError);
+        }
         println!("Setting db to {:?}", v);
         self.v = Some(v);
+        Ok(())
     }
 
     fn get(&self) -> &Option<SimpleType> {
@@ -226,6 +235,9 @@ fn test_db_compare() {
     let four = SimpleType::from_int(4);
     let six = SimpleType::from_int(6);
 
+    assert!(db.set(SimpleType::from_int(5)).is_err());
+
+    db.t = Some(SimpleTypeDef::Int);
     db.set(SimpleType::from_int(5));
 
     assert!(db.compare(four, Operation::Gte));
@@ -237,6 +249,7 @@ fn set_type() {
     let s = SimpleType::from_int(1);
     db.set(s);
 }
+
 
 fn main() {
     println!("Starting up the worst database of all time.  What a giant mistake you have made.");
