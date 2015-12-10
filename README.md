@@ -25,6 +25,10 @@ Run one version of the DB for each variable you need.
 
 Yes.  Don't use this database for anything.  If you do, you should be fired.
 
+## Stuff you need to know
+
+There's only 1 variable.  It's called `var`.  This is extremely limiting and pretty awful.  The DB is statically typed, explicitly.  So you have to set the type of your variable using `type = int`.  Supported types are int, float, string.  
+
 ## Examle Usage (client is prefixed with > only to show commands)
 
     telnet localhost 6000
